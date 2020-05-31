@@ -11,7 +11,7 @@ jobs:
         run: > 
           git clone https://github.com/bats-core/bats-core.git
           && pushd bats-core
-          && ./install.sh /usr/local
+          && sudo ./install.sh /usr/local
           && popd
 
       - uses: actions/checkout@v2
