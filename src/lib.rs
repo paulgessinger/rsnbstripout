@@ -1,3 +1,5 @@
+#![cfg_attr(feature = "strict", deny(warnings))]
+
 use serde::Serialize;
 use serde_json::{json, Value};
 use std::io;

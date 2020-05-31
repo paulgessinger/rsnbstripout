@@ -1,0 +1,29 @@
+name: CI
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Install dependencies
+        run: > 
+          git clone https://github.com/bats-core/bats-core.git
+          && pushd bats-core
+          && ./install.sh /usr/local
+          && popd
+
+      - uses: actions/checkout@v2
+
+      - name: Build
+        run: cargo build --features strict
+      
+      - name: Unit tests
+        run: cargo test
+
+      - name: Integration tests
+        run: bats test.bats
+
+      - name: Format
+        run: cargo fmt -- --check
