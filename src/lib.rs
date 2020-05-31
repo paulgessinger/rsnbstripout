@@ -1,3 +1,5 @@
+#![cfg_attr(feature = "strict", deny(warnings))]
+
 use serde::Serialize;
 use serde_json::{json, Value};
 use std::io;
@@ -163,7 +165,7 @@ mod tests {
     }
 
     #[test]
-    fn test_strip_file() {
+    fn test_strip_streams() {
         let raw = get_raw();
         let exp = get_exp();
 
