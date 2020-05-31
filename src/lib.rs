@@ -165,7 +165,7 @@ mod tests {
     }
 
     #[test]
-    fn test_strip_file() {
+    fn test_strip_streams() {
         let raw = get_raw();
         let exp = get_exp();
 
