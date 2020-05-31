@@ -133,7 +133,8 @@ mod tests {
     }
   ]
 }
-  "###.trim()
+  "###
+        .trim()
     }
 
     #[test]

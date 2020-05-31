@@ -1,9 +1,9 @@
 mod lib;
 
 use std;
+use std::boxed::Box;
 use std::fs::File;
 use std::io::{BufReader, BufWriter, Read, Write};
-use std::boxed::Box;
 
 fn main() {
     let args: Vec<String> = std::env::args().skip(1).collect();
@@ -30,20 +30,19 @@ fn main() {
         let infile: &str = &args[0];
         let fh = match File::open(&infile) {
             Ok(v) => v,
-            Err(e) => panic!("Unable to open {}: {}", infile, e)
+            Err(e) => panic!("Unable to open {}: {}", infile, e),
         };
         reader = Some(Box::new(BufReader::new(fh)));
 
         if args.len() == 2 {
-          let outfile = &args[1];
+            let outfile = &args[1];
 
-          let fh = match File::create(&outfile) {
-            Ok(v) => v,
-            Err(e) => panic!("Unable to create file at {}: {}", outfile, e)
-          };
+            let fh = match File::create(&outfile) {
+                Ok(v) => v,
+                Err(e) => panic!("Unable to create file at {}: {}", outfile, e),
+            };
 
-          writer = Some(Box::new(BufWriter::new(fh)));
-
+            writer = Some(Box::new(BufWriter::new(fh)));
         } else {
             writer = Some(Box::new(std::io::stdout()));
         }
@@ -56,5 +55,4 @@ fn main() {
         Err(err) => println!("There was an error: {}", err),
         Ok(_) => {}
     }
-
 }
