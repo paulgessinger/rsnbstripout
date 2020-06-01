@@ -25,19 +25,21 @@ fn do_strip(mut json: Value) -> Value {
     return json;
 }
 
-pub fn strip_pipe<R: io::Read, W: io::Write>(read: R, write: W) -> serde_json::Result<()> {
-    let raw: Value = serde_json::from_reader(read)?;
+pub fn strip_pipe<R: io::Read, W: io::Write>(read: R, write: W) -> Result<(), String> {
+    let raw: Value = match serde_json::from_reader(read) {
+        Ok(r) => r,
+        Err(err) => return Err(format!("Error parsing JSON: {}", err)),
+    };
 
     let processed = do_strip(raw);
 
     let fmt = serde_json::ser::PrettyFormatter::with_indent(b"  ");
     let mut ser = serde_json::ser::Serializer::with_formatter(write, fmt);
-    processed.serialize(&mut ser)?;
 
-    // let mut write = ser.into_inner();
-    // write.write(b"\n");
-
-    return Ok(());
+    match processed.serialize(&mut ser) {
+        Err(err) => return Err(format!("Error serializing to JSON: {}", err)),
+        Ok(_) => Ok(()),
+    }
 }
 
 #[allow(dead_code)]
@@ -46,7 +48,7 @@ pub fn strip_string(input: &str) -> serde_json::Result<String> {
     let buf = Vec::new();
     let mut writer = io::BufWriter::new(buf);
 
-    strip_pipe(reader, &mut writer)?;
+    strip_pipe(reader, &mut writer).expect("Error stripping");
     Ok(String::from_utf8_lossy(writer.buffer()).to_string())
 }
 
@@ -162,6 +164,19 @@ mod tests {
         strip_pipe(reader, &mut writer).expect("strip pipe failed");
         let act = String::from_utf8_lossy(writer.buffer());
         assert_eq!(act, exp);
+    }
+
+    #[test]
+    fn test_strip_pipe_invalid_input() {
+        let raw = "{djj]not valid\"";
+        let reader = io::BufReader::new(raw.as_bytes());
+        let mut writer = io::BufWriter::new(Vec::new());
+
+        let res = strip_pipe(reader, &mut writer);
+        match res {
+            Err(err) => assert!(err.contains("Error parsing JSON")),
+            Ok(_) => assert!(false),
+        };
     }
 
     #[test]
