@@ -143,13 +143,13 @@ mod tests {
 
     // #[test]
     // fn test_strip() {
-        // let raw = get_raw();
-        // let exp = get_exp();
+    // let raw = get_raw();
+    // let exp = get_exp();
 
-        // let parsed_raw: Value = serde_json::from_str(raw).expect("Unable to parse JSON");
-        // let act_json = do_strip(parsed_raw);
-        // let act = serde_json::to_string_pretty(&act_json).unwrap();
-        // assert_eq!(act, exp);
+    // let parsed_raw: Value = serde_json::from_str(raw).expect("Unable to parse JSON");
+    // let act_json = do_strip(parsed_raw);
+    // let act = serde_json::to_string_pretty(&act_json).unwrap();
+    // assert_eq!(act, exp);
     // }
 
     #[test]
