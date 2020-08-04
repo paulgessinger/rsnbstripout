@@ -44,6 +44,17 @@ fn get_reader_writer(args: &Vec<String>) -> Result<(Box<dyn Read>, Box<dyn Write
 fn main() {
     let args: Vec<String> = std::env::args().skip(1).collect();
 
+    if args.contains(&String::from("-h")) || args.contains(&String::from("--help")) {
+      println!("Strips output from Jupyter Notebooks");
+      println!("Usage: rsnbstripout [INPUT] [OUTPUT]");
+      println!();
+      println!("Accepts either ZERO, ONE or TWO arguments.");
+      println!("rsnbstripout -> stdin to stdout");
+      println!("rsnbstripout INPUT -> file to stdout");
+      println!("rsnbstripout INPUT OUTPUT -> file to file");
+      return;
+    }
+
     let (reader, mut writer) = match get_reader_writer(&args) {
         Ok((r, w)) => (r, w),
         Err(err) => panic!("{}", err),
